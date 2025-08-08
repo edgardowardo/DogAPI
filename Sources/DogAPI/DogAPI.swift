@@ -32,19 +32,15 @@ public class DogAPI: DogAPIProviding {
     }
     
     public func fetchImages(from breed: DogBreed, count: Int = 10) async throws -> [URL] {
-        let url = baseURL.appendingPathComponent("breed/\(breed.path)/images/random/\(count)")
+        let url = baseURL.appendingPathComponent("breed/\(breed.name)/images/random/\(count)")
         let (data, _) = try await session.data(from: url)
         let decoded = try JSONDecoder().decode(DogImagesResponse.self, from: data)
         return decoded.message.map { URL(string: $0)! }
     }
     
     private static func flattenBreedsDict(_ dict: [String: [String]]) -> [DogBreed] {
-        let list = dict.flatMap { main, subs in
-            (subs.isEmpty ? [DogBreed(main: main, sub: nil)] : subs.map { DogBreed(main: main, sub: $0) })
-        }
-        return list.sorted { lhs, rhs in
-            lhs.main < rhs.main || (lhs.main == rhs.main && (lhs.sub ?? "") < (rhs.sub ?? ""))
-        }
+        dict
+            .compactMap { name, _ in DogBreed(name: name) }
+            .sorted { lhs, rhs in lhs.name < rhs.name }
     }
 }
-    

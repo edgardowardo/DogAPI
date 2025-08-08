@@ -12,11 +12,11 @@ struct DogAPIBreedListTests {
         let api = DogAPI(session: session)
         let breeds = try await api.fetchBreeds()
 
-        #expect(breeds.contains(DogBreed(main: "bulldog", sub: "english")), "Should contain bulldog - english")
-        #expect(breeds.contains(DogBreed(main: "australian", sub: "kelpie")), "Should contain australian - kelpie")
-        #expect(breeds.contains(DogBreed(main: "affenpinscher", sub: nil)), "Should contain affenpinscher (no subbreed)")
-        #expect(!breeds.contains(DogBreed(main: "unicorn", sub: nil)), "Should not contain non-existent breed")
-        #expect(breeds.count == 162, "Should load a substantial number of breeds+subbreeds")
+        #expect(breeds.contains(DogBreed(name: "bulldog")), "Should contain bulldog - english")
+        #expect(breeds.contains(DogBreed(name: "australian")), "Should contain australian - kelpie")
+        #expect(breeds.contains(DogBreed(name: "affenpinscher")), "Should contain affenpinscher (no subbreed)")
+        #expect(!breeds.contains(DogBreed(name: "unicorn")), "Should not contain non-existent breed")
+        #expect(breeds.count == 107, "Should load a substantial number of breeds+subbreeds")
     }
 
     @Test("fetchBreeds throws on invalid data")
@@ -32,12 +32,12 @@ struct DogAPIBreedListTests {
         }
     }
     
-    @Test("fetchImages decodes hound/afghan URLs correctly")
+    @Test("fetchImages decodes hound URLs correctly")
     func testFetchImagesParsesCorrectly() async throws {
         let data = MockDogData.mockHoundAfganJSON.data(using: .utf8)
         let session = makeMockSession(data)
         let api = DogAPI(session: session)
-        let breed = DogBreed(main: "hound", sub: "afghan")
+        let breed = DogBreed(name: "hound")
         let images = try await api.fetchImages(from: breed, count: 3)
 
         let expectedURLs = [
@@ -55,7 +55,7 @@ struct DogAPIBreedListTests {
         let session = makeMockSession(data)
         let api = DogAPI(session: session)
         do {
-            _ = try await api.fetchImages(from: DogBreed(main: "hound", sub: "afghan"), count: 3)
+            _ = try await api.fetchImages(from: DogBreed(name: "hound"), count: 3)
             #expect(Bool(false), "Should throw on bad data")
         } catch {
             #expect(true)
