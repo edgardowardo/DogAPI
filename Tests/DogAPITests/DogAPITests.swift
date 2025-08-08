@@ -2,7 +2,7 @@ import Testing
 import Foundation
 @testable import DogAPI
 
-@Suite("DogAPI Dog CEO JSON Parsing Tests")
+@Suite("DogAPI Dog CEO JSON Parsing Tests", .serialized)
 struct DogAPIBreedListTests {
     // Helper for creating session that returns the static mockBreedsJSON
     private final class MockURLProtocol: URLProtocol {
