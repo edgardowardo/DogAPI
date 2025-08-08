@@ -1,11 +1,5 @@
 import Foundation
 
-public struct DogBreed: Equatable, Codable {
-    public let main: String
-    public let sub: String?
-    public var path: String { main + (sub == nil ? "" : "/") + (sub ?? "") }
-}
-
 private struct DogBreedsResponse: Codable {
     let message: [String: [String]]
     let status: String

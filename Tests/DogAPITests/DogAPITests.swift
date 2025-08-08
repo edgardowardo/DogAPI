@@ -63,9 +63,8 @@ struct DogAPIBreedListTests {
     }
 }
 
-
 //
-// MARK: Helpers
+// MARK: Helpers specifically for mocking the session data
 //
 private final class MockURLProtocol: URLProtocol {
     nonisolated(unsafe) static var testData: Data?
