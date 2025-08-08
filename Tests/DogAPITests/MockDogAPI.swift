@@ -2,6 +2,20 @@ import Testing
 @testable import DogAPI
 
 struct MockDogData {
+    
+    /// https://dog.ceo/api/breed/hound/afghan/images/random/10
+    static let mockHoundAfganJSON = """
+    {
+        "message": [
+            "https://images.dog.ceo/breeds/hound-afghan/n02088094_13145.jpg",
+            "https://images.dog.ceo/breeds/hound-afghan/n02088094_3982.jpg",
+            "https://images.dog.ceo/breeds/hound-afghan/n02088094_4195.jpg"
+        ],
+        "status": "success"
+    }    
+    """
+    
+    /// https://dog.ceo/api/breeds/list/all
     static let mockBreedsJSON = """
         {
             "message": {
