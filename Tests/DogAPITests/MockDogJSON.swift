@@ -1,10 +1,18 @@
 import Testing
 @testable import DogAPI
 
-struct MockDogData {
+struct MockDogJSON {
+        
+    /// https://dog.ceo/api/breed/hound/images/random
+    static let houndSingle = """
+    {
+        "message": "https://images.dog.ceo/breeds/hound-english/n02089973_255.jpg",
+        "status": "success"
+    }    
+    """
     
     /// https://dog.ceo/api/breed/hound/afghan/images/random/10
-    static let mockHoundAfganJSON = """
+    static let houndList = """
     {
         "message": [
             "https://images.dog.ceo/breeds/hound-afghan/n02088094_13145.jpg",
@@ -16,7 +24,7 @@ struct MockDogData {
     """
     
     /// https://dog.ceo/api/breeds/list/all
-    static let mockBreedsJSON = """
+    static let breedsList = """
         {
             "message": {
                 "affenpinscher": [],

@@ -5,6 +5,11 @@ private struct DogBreedsResponse: Codable {
     let status: String
 }
 
+private struct DogImageResponse: Codable {
+    let message: String
+    let status: String
+}
+
 private struct DogImagesResponse: Codable {
     let message: [String]
     let status: String
@@ -29,6 +34,13 @@ public class DogAPI: DogAPIProviding {
         let (data, _) = try await session.data(from: url)
         let decoded = try JSONDecoder().decode(DogBreedsResponse.self, from: data)
         return DogAPI.flattenBreedsDict(decoded.message)
+    }
+    
+    public func fetchImage(from breed: DogBreed) async throws -> URL {
+        let url = baseURL.appendingPathComponent("breed/\(breed.name)/images/random")
+        let (data, _) = try await session.data(from: url)
+        let decoded = try JSONDecoder().decode(DogImageResponse.self, from: data)
+        return URL(string: decoded.message.self)!
     }
     
     public func fetchImages(from breed: DogBreed, count: Int = 10) async throws -> [URL] {

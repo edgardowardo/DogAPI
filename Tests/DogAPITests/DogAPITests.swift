@@ -7,7 +7,7 @@ struct DogAPIBreedListTests {
 
     @Test("fetchBreeds decodes and flattens breeds and subbreeds correctly")
     func testFetchBreedsParsesCorrectly() async throws {
-        let data = MockDogData.mockBreedsJSON.data(using: .utf8)
+        let data = MockDogJSON.breedsList.data(using: .utf8)
         let session = makeMockSession(data)
         let api = DogAPI(session: session)
         let breeds = try await api.fetchBreeds()
@@ -34,7 +34,7 @@ struct DogAPIBreedListTests {
     
     @Test("fetchImages decodes hound URLs correctly")
     func testFetchImagesParsesCorrectly() async throws {
-        let data = MockDogData.mockHoundAfganJSON.data(using: .utf8)
+        let data = MockDogJSON.houndList.data(using: .utf8)
         let session = makeMockSession(data)
         let api = DogAPI(session: session)
         let breed = DogBreed(name: "hound")
@@ -61,6 +61,32 @@ struct DogAPIBreedListTests {
             #expect(true)
         }
     }
+    
+    
+    @Test("fetchImage decodes hound URL correctly")
+    func testFetchImageParsesCorrectly() async throws {
+        let data = MockDogJSON.houndSingle.data(using: .utf8)
+        let session = makeMockSession(data)
+        let api = DogAPI(session: session)
+        let breed = DogBreed(name: "hound")
+        let images = try await api.fetchImage(from: breed)
+        let expectedURL = URL(string: "https://images.dog.ceo/breeds/hound-english/n02089973_255.jpg")!
+        #expect(images == expectedURL, "Should decode exactly the expected URL")
+    }
+
+    @Test("fetchImage throws on invalid data")
+    func testFetchImageThrowsOnInvalidData() async {
+        let data = Data([0x00, 0x01, 0x02])
+        let session = makeMockSession(data)
+        let api = DogAPI(session: session)
+        do {
+            _ = try await api.fetchImage(from: DogBreed(name: "hound"))
+            #expect(Bool(false), "Should throw on bad data")
+        } catch {
+            #expect(true)
+        }
+    }
+    
 }
 
 //
