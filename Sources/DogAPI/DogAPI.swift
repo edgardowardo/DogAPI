@@ -18,6 +18,7 @@ private struct DogImagesResponse: Codable {
 public protocol DogAPIProviding {
     func fetchBreeds() async throws -> [DogBreed]
     func fetchImages(from breed: DogBreed, count: Int) async throws -> [URL]
+    func fetchImage(from breed: DogBreed) async throws -> URL
 }
 
 public class DogAPI: DogAPIProviding {
