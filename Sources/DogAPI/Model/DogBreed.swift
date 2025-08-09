@@ -5,7 +5,7 @@ public struct DogBreed: Equatable, Codable {
     public let name: String
     public let subBreeds: [DogBreed]?
     
-    init(base: String? = nil, name: String, subBreeds: [DogBreed]? = nil) {
+    public init(base: String? = nil, name: String, subBreeds: [DogBreed]? = nil) {
         self.base = base
         self.name = name
         self.subBreeds = subBreeds
