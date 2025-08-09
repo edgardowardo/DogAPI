@@ -12,10 +12,10 @@ struct DogAPIBreedListTests {
         let api = DogAPI(session: session)
         let breeds = try await api.fetchBreeds()
 
-        #expect(breeds.contains(DogBreed(name: "bulldog")), "Should contain bulldog - english")
-        #expect(breeds.contains(DogBreed(name: "australian")), "Should contain australian - kelpie")
-        #expect(breeds.contains(DogBreed(name: "affenpinscher")), "Should contain affenpinscher (no subbreed)")
-        #expect(!breeds.contains(DogBreed(name: "unicorn")), "Should not contain non-existent breed")
+        #expect(breeds.contains(DogBreed(base: nil, name: "bulldog", subBreeds: ["boston", "english", "french"].map { DogBreed(base: "bulldog", name: $0, subBreeds: nil)})), "Should contain bulldog and sub breeds - english")
+        #expect(breeds.contains(DogBreed(base: nil, name: "australian", subBreeds: ["kelpie", "shepherd"].map { DogBreed(base: "australian", name: $0, subBreeds: nil)})), "Should contain australian - kelpie")
+        #expect(breeds.contains(DogBreed(base: nil, name: "affenpinscher", subBreeds: nil)), "Should contain affenpinscher (no subbreed)")
+        #expect(!breeds.contains(DogBreed(base: nil, name: "unicorn", subBreeds: [])), "Should not contain non-existent breed")
         #expect(breeds.count == 107, "Should load a substantial number of breeds+subbreeds")
     }
 
@@ -37,7 +37,7 @@ struct DogAPIBreedListTests {
         let data = MockDogJSON.houndList.data(using: .utf8)
         let session = makeMockSession(data)
         let api = DogAPI(session: session)
-        let breed = DogBreed(name: "hound")
+        let breed = DogBreed(base: nil, name: "hound", subBreeds: [])
         let images = try await api.fetchImages(from: breed, count: 3)
 
         let expectedURLs = [
@@ -55,7 +55,7 @@ struct DogAPIBreedListTests {
         let session = makeMockSession(data)
         let api = DogAPI(session: session)
         do {
-            _ = try await api.fetchImages(from: DogBreed(name: "hound"), count: 3)
+            _ = try await api.fetchImages(from: DogBreed(base: nil, name: "hound", subBreeds: []), count: 3)
             #expect(Bool(false), "Should throw on bad data")
         } catch {
             #expect(true)
@@ -68,7 +68,7 @@ struct DogAPIBreedListTests {
         let data = MockDogJSON.houndSingle.data(using: .utf8)
         let session = makeMockSession(data)
         let api = DogAPI(session: session)
-        let breed = DogBreed(name: "hound")
+        let breed = DogBreed(base: nil, name: "hound", subBreeds: [])
         let images = try await api.fetchImage(from: breed)
         let expectedURL = URL(string: "https://images.dog.ceo/breeds/hound-english/n02089973_255.jpg")!
         #expect(images == expectedURL, "Should decode exactly the expected URL")
@@ -80,7 +80,7 @@ struct DogAPIBreedListTests {
         let session = makeMockSession(data)
         let api = DogAPI(session: session)
         do {
-            _ = try await api.fetchImage(from: DogBreed(name: "hound"))
+            _ = try await api.fetchImage(from: DogBreed(base: nil, name: "hound", subBreeds: []))
             #expect(Bool(false), "Should throw on bad data")
         } catch {
             #expect(true)

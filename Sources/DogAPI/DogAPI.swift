@@ -51,8 +51,11 @@ public class DogAPI: DogAPIProviding {
     }
     
     private static func flattenBreedsDict(_ dict: [String: [String]]) -> [DogBreed] {
-        dict
-            .compactMap { name, _ in DogBreed(name: name) }
-            .sorted { lhs, rhs in lhs.name < rhs.name }
+        let list = dict.flatMap { main, subs in
+            (subs.isEmpty ? [DogBreed(base: nil, name: main, subBreeds: nil)]
+             : [DogBreed(base: nil, name: main, subBreeds: subs.map {
+                subName in DogBreed(base: main, name: subName, subBreeds: nil) })] )
+        }
+        return list.sorted { lhs, rhs in lhs.name < rhs.name }
     }
 }
