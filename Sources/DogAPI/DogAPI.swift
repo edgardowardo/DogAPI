@@ -25,7 +25,7 @@ public class DogAPI: DogAPIProviding {
     private let baseURL: URL
     private let session: URLSession
     
-    init(baseURL: URL = URL(string: "https://dog.ceo/api")!, session: URLSession = .shared) {
+    public init(baseURL: URL = URL(string: "https://dog.ceo/api")!, session: URLSession = .shared) {
         self.session = session
         self.baseURL = baseURL
     }
