@@ -1,27 +1,53 @@
 import Foundation
 
-private struct DogBreedsResponse: Codable {
+//
+// MARK: Internal
+//
+struct DogBreedsResponse: Codable {
     let message: [String: [String]]
     let status: String
 }
 
-private struct DogImageResponse: Codable {
+struct DogImageResponse: Codable {
     let message: String
     let status: String
 }
 
-private struct DogImagesResponse: Codable {
+struct DogImagesResponse: Codable {
     let message: [String]
     let status: String
 }
 
+protocol DogBreedsMapProviding {
+    static func map(_ response: DogBreedsResponse) -> [DogBreed]
+}
+
+extension DogBreedsMapProviding {
+    static func map(_ response: DogBreedsResponse) -> [DogBreed] {
+        let list = response.message.flatMap { main, subs in
+            (subs.isEmpty ? [DogBreed(base: nil, name: main, subBreeds: nil)]
+             : [DogBreed(base: nil, name: main, subBreeds: subs.map {
+                subName in DogBreed(base: main, name: subName, subBreeds: nil) })] )
+        }
+        return list.sorted { lhs, rhs in lhs.name < rhs.name }
+    }
+}
+
+//
+// MARK: Public
+//
 public protocol DogAPIProviding {
     func fetchBreeds() async throws -> [DogBreed]
     func fetchImages(from breed: DogBreed, count: Int) async throws -> [URL]
     func fetchImage(from breed: DogBreed) async throws -> URL
 }
 
-public class DogAPI: DogAPIProviding {
+public enum DogAPIError: Error {
+    case invalidJSON
+}
+
+public class DogAPI: DogAPIProviding, DogBreedsMapProviding {
+    
     private let baseURL: URL
     private let session: URLSession
     
@@ -34,7 +60,7 @@ public class DogAPI: DogAPIProviding {
         let url = baseURL.appendingPathComponent("breeds/list/all")
         let (data, _) = try await session.data(from: url)
         let decoded = try JSONDecoder().decode(DogBreedsResponse.self, from: data)
-        return DogAPI.flattenBreedsDict(decoded.message)
+        return DogAPI.map(decoded)
     }
     
     public func fetchImage(from breed: DogBreed) async throws -> URL {
@@ -51,12 +77,4 @@ public class DogAPI: DogAPIProviding {
         return decoded.message.map { URL(string: $0)! }
     }
     
-    private static func flattenBreedsDict(_ dict: [String: [String]]) -> [DogBreed] {
-        let list = dict.flatMap { main, subs in
-            (subs.isEmpty ? [DogBreed(base: nil, name: main, subBreeds: nil)]
-             : [DogBreed(base: nil, name: main, subBreeds: subs.map {
-                subName in DogBreed(base: main, name: subName, subBreeds: nil) })] )
-        }
-        return list.sorted { lhs, rhs in lhs.name < rhs.name }
-    }
 }
