@@ -1,5 +1,6 @@
 import Testing
 import Foundation
+import MockDogJSON
 @testable import DogAPI
 
 @Suite("DogAPI Dog CEO JSON Parsing Tests", .serialized)

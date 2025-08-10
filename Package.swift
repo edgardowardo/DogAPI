@@ -15,6 +15,9 @@ let package = Package(
             targets: ["DogAPI"]
         ),
     ],
+    dependencies: [
+        .package(url: "git@github.com:edgardowardo/MockDogJSON.git", branch: "main"),
+    ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
@@ -23,7 +26,10 @@ let package = Package(
         ),
         .testTarget(
             name: "DogAPITests",
-            dependencies: ["DogAPI"]
+            dependencies: [
+                "DogAPI",
+                .product(name: "MockDogJSON", package: "MockDogJSON")
+            ]
         ),
     ]
 )

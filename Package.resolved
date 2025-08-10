@@ -1,0 +1,15 @@
+{
+  "originHash" : "4e3855ca3e015dba738ebb7b680d99db2c489aa76a3f04575a8657e0a9ed21c9",
+  "pins" : [
+    {
+      "identity" : "mockdogjson",
+      "kind" : "remoteSourceControl",
+      "location" : "git@github.com:edgardowardo/MockDogJSON.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "192bf5896e4b30523d89dbfd447d7d58add7466b"
+      }
+    }
+  ],
+  "version" : 3
+}
