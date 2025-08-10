@@ -1,28 +1,28 @@
 import Foundation
 
 //
-// MARK: Internal
+// MARK: Private
 //
-struct DogBreedsResponse: Codable {
+private struct DogBreedsResponse: Codable {
     let message: [String: [String]]
     let status: String
 }
 
-struct DogImageResponse: Codable {
+private struct DogImageResponse: Codable {
     let message: String
     let status: String
 }
 
-struct DogImagesResponse: Codable {
+private struct DogImagesResponse: Codable {
     let message: [String]
     let status: String
 }
 
-protocol DogBreedsMapProviding {
+private protocol DogBreedsMapProviding {
     static func map(_ response: DogBreedsResponse) -> [DogBreed]
 }
 
-extension DogBreedsMapProviding {
+private extension DogBreedsMapProviding {
     static func map(_ response: DogBreedsResponse) -> [DogBreed] {
         let list = response.message.flatMap { main, subs in
             (subs.isEmpty ? [DogBreed(base: nil, name: main, subBreeds: nil)]
