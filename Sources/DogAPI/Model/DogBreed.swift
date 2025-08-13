@@ -1,6 +1,6 @@
 import Foundation
 
-public struct DogBreed: Equatable, Codable {
+public struct DogBreed: Equatable, Codable, Hashable {
     public let base: String?
     public let name: String
     public let subBreeds: [DogBreed]?
